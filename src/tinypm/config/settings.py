@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     # Third Party
     'rest_framework',
     'debug_toolbar',
+
+    # First Party
+    'task.apps.TaskConfig',
 ]
 
 MIDDLEWARE = [
