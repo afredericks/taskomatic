@@ -1,0 +1,10 @@
+.env
+*.sqlite3
+__pycache__
+.venv
+staticfiles
+static/dist
+
+# Frontend
+node_modules
+frontend/node_modules
