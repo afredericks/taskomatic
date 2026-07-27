@@ -5,8 +5,15 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .models import Comment, Task
+
+
+@ensure_csrf_cookie
+def app(request):
+    """Serve the single-page frontend."""
+    return render(request, 'task/app.html')
 
 
 def task_detail(request, task_id):

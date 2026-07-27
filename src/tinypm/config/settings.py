@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     # Third Party
     'rest_framework',
+    'django_vite',
     'debug_toolbar',
 
     # First Party
@@ -115,6 +116,19 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+}
+
+
+# django-vite
+# DJANGO_VITE_DEV_MODE: serve assets from the Vite dev server (npm run dev)
+# instead of the built manifest. Defaults to DEBUG.
+DJANGO_VITE = {
+    'default': {
+        'dev_mode': env.bool('DJANGO_VITE_DEV_MODE', default=DEBUG),
+        'dev_server_port': 5173,
+        'static_url_prefix': 'dist',
+        'manifest_path': BASE_DIR / 'static' / 'dist' / '.vite' / 'manifest.json',
+    }
 }
 
 
