@@ -1,0 +1,10 @@
+# https://taplo.tamasfe.dev/configuration/file.html
+
+[formatting]
+# https://taplo.tamasfe.dev/configuration/formatter-options.html
+# Defaults already match .editorconfig for:
+# - column_width = 80 (max_line_length)
+# - trailing_newline = true (insert_final_newline)
+# - crlf = false (end_of_line = lf)
+indent_string = "	"
+reorder_arrays = true

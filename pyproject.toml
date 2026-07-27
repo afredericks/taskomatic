@@ -3,25 +3,20 @@ name = "tinypm"
 version = "0.1.0"
 description = "Task/Project management (fullstack interview edition)"
 readme = "README.md"
-authors = [
-    { name = "Andrew Pinkham", email = "code@andrewsforge.com" }
-]
+authors = [{ name = "Andrew Pinkham", email = "code@andrewsforge.com" }]
 requires-python = ">=3.13"
 dependencies = [
-    "django>=6.0.3",
-    "django-debug-toolbar>=6.2.0",
-    "django-environ>=0.13.0",
-    "django-vite>=3.1.0",
-    "djangorestframework>=3.16.1",
-    "gunicorn>=25.1.0",
-    "psycopg>=3.3.3",
+	"django-debug-toolbar>=6.2.0",
+	"django-environ>=0.13.0",
+	"django-vite>=3.1.0",
+	"django>=6.0.3",
+	"djangorestframework>=3.16.1",
+	"gunicorn>=25.1.0",
+	"psycopg>=3.3.3",
 ]
 
 [dependency-groups]
-dev = [
-    "pytest>=9.0.2",
-    "pytest-django>=4.12.0",
-]
+dev = ["pytest-django>=4.12.0", "pytest>=9.0.2"]
 
 [build-system]
 requires = ["uv_build>=0.11.0,<0.12.0"]

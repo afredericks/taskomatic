@@ -1,0 +1,34 @@
+; https://editorconfig.org/
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = tab
+insert_final_newline = true
+max_line_length = 80
+trim_trailing_whitespace = true
+
+[*.md]
+indent_style = space
+; Robert-Bringhurst in The Elements of Typographic Style:
+; Anything from 45 to 75 characters is widely regarded as a satisfactory
+; length of line for a single-column page […] The 66-character line […]
+; is widely regarded as ideal (25).
+; Given our adherence to https://sembr.org
+; this limit should not be an issue.
+max_line_length = 75
+
+[*.{yaml,yml}]
+indent_style = space
+
+; Both halves of the project indent with four spaces.
+[*.{py,ts,js,svelte,html,css,json}]
+indent_style = space
+max_line_length = 99
+
+; Django writes these files.
+[src/tinypm/task/migrations/*.py]
+max_line_length = off

@@ -80,13 +80,13 @@ uv run python manage.py createsuperuser
 
 ## Layout
 
-| Path | Contents |
-| ---- | -------- |
-| `src/tinypm/task/models.py` | `Project`, `Task`, and `Comment` |
-| `src/tinypm/task/api.py` | the DRF API the frontend consumes |
-| `src/tinypm/task/serializers.py` | API serializers |
-| `src/tinypm/task/views.py` | the page shell and the server-rendered task page |
-| `frontend/src/lib/` | the Svelte components and API client |
+| Path                             | Contents                                         |
+| -------------------------------- | ------------------------------------------------ |
+| `src/tinypm/task/models.py`      | `Project`, `Task`, and `Comment`                 |
+| `src/tinypm/task/api.py`         | the DRF API the frontend consumes                |
+| `src/tinypm/task/serializers.py` | API serializers                                  |
+| `src/tinypm/task/views.py`       | the page shell and the server-rendered task page |
+| `frontend/src/lib/`              | the Svelte components and API client             |
 
 ## Seeded logins
 

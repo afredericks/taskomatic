@@ -1,0 +1,119 @@
+# Google Markdown Style Guide Configuration
+# https://google.github.io/styleguide/docguide/style.html
+#
+# This config enforces Google's Markdown conventions,
+# with exceptions:
+# -   dashes are used for lists to avoid ambiguities with asterisks
+# -   italics are normalized to underscores (like Prettier)
+# -   bolds are normalized to asterisks (like Prettier)
+#
+# Use alongside any flavor:
+#
+#   [global]
+#   flavor = "mkdocs"  # Flavor handles parsing, this config handles style
+
+[global]
+line_length = 80 # Google: "Wrap to 80 characters"
+# The following rules are enabled by default and match Google's guide:
+# - MD018: Space after hash in headings
+# - MD022: Blank lines around headings
+# - MD025: Single H1 per document
+# - MD033: No inline HTML (Google: "Strongly prefer Markdown")
+# - MD040: Code blocks should specify language
+# - MD047: Files end with single newline
+enable = [
+	# List indentation should be consistent
+	# https://rumdl.dev/md005/
+	"MD005",
+	# Lists: Continuation content must align with first character of item content
+	# With MD030 settings, continuation indents are:
+	# -   4 spaces for unordered lists (dash + 3 spaces)
+	# -   4 spaces for ordered lists (digit + period + 2 spaces)
+	# https://rumdl.dev/md077/
+	"MD077",
+]
+
+# Headings: ATX-style only (# Heading), not Setext (underlines)
+# https://rumdl.dev/md003/
+[MD003]
+style = "atx"
+
+# Lists: Google uses asterisk (*) for unordered lists
+# However, * is also used for italics and bold in Markdown,
+# so we use the less ambiguous dash (-).
+# https://rumdl.dev/md004/
+[MD004]
+style = "dash"
+
+# Lists: 4-space indent for nesting
+# https://rumdl.dev/md007/
+[MD007]
+indent = 4
+
+# Trailing spaces: Google says use backslash for line breaks, not trailing spaces
+# https://rumdl.dev/md009/
+[MD009]
+strict = true
+
+# Line length: Tables are excluded from line length checks by default
+# (tables = false), which allows wide tables without violations.
+# https://rumdl.dev/md013/
+# [MD013]
+# tables = false
+
+# Lists: Google uses lazy numbering (all 1.) for long lists
+# Use "one_or_ordered" to allow both lazy and explicit numbering
+# https://rumdl.dev/md029/
+[MD029]
+style = "one_or_ordered"
+
+# Lists: Google specifies 3 spaces after bullet, 2 after number
+# This aligns continuation text with first word
+#   *   List item text
+#   1.  Numbered item text
+# https://rumdl.dev/md030/
+[MD030]
+ul_single = 3
+ul_multi = 3
+ol_single = 2
+ol_multi = 2
+
+# Lists: Require proper indentation for lazy continuation lines
+# https://rumdl.dev/md032/
+# https://github.com/rvben/rumdl/issues/342
+[MD032]
+allow-lazy-continuation = false
+
+# Code blocks: Fenced (```) preferred over indented
+# https://rumdl.dev/md046/
+[MD046]
+style = "fenced"
+
+# Normalize italics to underscores
+# https://rumdl.dev/md049/
+[MD049]
+style = "underscore"
+
+# Normalize bold to asterisks
+# https://rumdl.dev/md050/
+[MD050]
+style = "asterisk"
+
+# Tables: Require leading pipes only (no trailing pipes)
+# https://rumdl.dev/md055/
+[MD055]
+style = "leading-only"
+
+# Tables: Require blank lines around tables
+# https://rumdl.dev/md058/
+[MD058]
+minimum-before = 1
+minimum-after = 1
+
+# Tables: Prettier-style formatting with aligned columns
+# Pads cells with spaces so columns align visually in raw Markdown.
+# https://rumdl.dev/md060/
+[MD060]
+enabled = true
+style = "aligned"
+column-align = "auto"
