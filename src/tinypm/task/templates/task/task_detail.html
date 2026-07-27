@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}{{ task.title }} - TinyPM{% endblock %}
+
+{% block content %}
+<h1>{{ task.title }}</h1>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %};">
+        {{ message }}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Details</h2>
+<dl>
+    <dt>Project</dt>
+    <dd>{{ task.project.name }}</dd>
+
+    <dt>Description</dt>
+    <dd>{{ task.description|default:"No description" }}</dd>
+
+    <dt>Status</dt>
+    <dd>
+        <span style="
+            padding: 3px 8px;
+            border-radius: 3px;
+            {% if task.status == 'done' %}
+                background: #d4edda; color: #155724;
+            {% elif task.status == 'in_progress' %}
+                background: #cce5ff; color: #004085;
+            {% else %}
+                background: #f8f9fa; color: #6c757d;
+            {% endif %}
+        ">
+            {{ task.get_status_display }}
+        </span>
+    </dd>
+
+    <dt>Assignee</dt>
+    <dd>
+        {% if task.assignee %}
+            {{ task.assignee.get_full_name|default:task.assignee.username }}
+            ({{ task.assignee.email }})
+        {% else %}
+            <em>Unassigned</em>
+        {% endif %}
+    </dd>
+
+    <dt>Due Date</dt>
+    <dd>
+        {% if task.due_date %}
+            {{ task.due_date|date:"F j, Y" }}
+            {% if task.due_date < today and task.status != 'done' %}
+                <span style="color: red; font-weight: bold;">
+                    ({{ days_overdue }} day{{ days_overdue|pluralize }} overdue!)
+                </span>
+            {% elif task.due_date == today and task.status != 'done' %}
+                <span style="color: orange; font-weight: bold;">(Due today!)</span>
+            {% endif %}
+        {% else %}
+            <em>No due date set</em>
+        {% endif %}
+    </dd>
+</dl>
+
+<h2>Actions</h2>
+
+<form method="post" style="display: inline;">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="update_status">
+    <label>Change status:
+        <select name="status">
+            <option value="todo" {% if task.status == 'todo' %}selected{% endif %}>To Do</option>
+            <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+            <option value="done" {% if task.status == 'done' %}selected{% endif %}>Done</option>
+        </select>
+    </label>
+    <button type="submit">Update</button>
+</form>
+
+<form method="post" style="display: inline;">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="assign">
+    <label>Assign to:
+        <select name="assignee_id">
+            <option value="">-- Select --</option>
+            {% for user in available_users %}
+            <option value="{{ user.id }}" {% if task.assignee == user %}selected{% endif %}>
+                {{ user.username }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+    <button type="submit">Assign</button>
+</form>
+
+<h2>Comments ({{ total_comments }})</h2>
+
+{% if user.is_authenticated %}
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="add_comment">
+    <textarea name="comment_text" rows="3" cols="50" placeholder="Add a comment..."></textarea>
+    <br>
+    <button type="submit">Post Comment</button>
+</form>
+{% else %}
+<p><em>Log in to add comments.</em></p>
+{% endif %}
+
+<ul>
+    {% for comment in comments %}
+    <li>
+        <strong>{{ comment.author.username }}</strong>
+        <small>({{ comment.created_at|timesince }} ago)</small>
+        <p>{{ comment.text }}</p>
+    </li>
+    {% empty %}
+    <li>No comments yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
