@@ -1,116 +1,124 @@
 <script lang="ts">
-    import { getTask, updateTaskStatus } from './api'
+    import { onMount } from 'svelte'
 
-    let { id } = $props()
+    import { getTask } from './api'
+    import Capsule from './Capsule.svelte'
+    import { ROUTES } from './routes'
+    import StatusCapsule from './StatusCapsule.svelte'
+    import TaskComments from './TaskComments.svelte'
+    import { daysOverdue } from './tasks'
+    import { formatDate } from './time'
+    import type { Task } from './types'
 
-    let task = $state(null)
-    let selectedStatus = $state('')
-    let saving = $state(false)
+    /** The task's id, from the URL. Every navigation is a full page load, so it never changes. */
+    let { id }: { id: number } = $props()
 
-    $effect(() => {
-        load()
-    })
+    let task = $state<Task | null>(null)
+    let loadError = $state('')
+
+    // Loaded once, then again after a status change so the page shows what
+    // the server now holds.
+    onMount(load)
 
     async function load() {
-        const data = await getTask(id)
-        task = data
-        selectedStatus = data.status
+        try {
+            task = await getTask(id)
+        } catch {
+            loadError = 'This task could not be loaded. Refresh the page to try again.'
+        }
     }
 
-    async function save() {
-        saving = true
-        await updateTaskStatus(id, selectedStatus)
-        await load()
-        saving = false
-    }
+    const overdueDays = $derived(task ? daysOverdue(task) : 0)
 </script>
 
 {#if task}
-    <p><a href="/pm/app/">Back to tasks</a></p>
+    <p><a href={ROUTES.tasks}>Back to tasks</a></p>
 
     <h1>{task.title}</h1>
 
-    <dl>
-        <dt>Project</dt>
-        <dd>{task.project_name}</dd>
+    <dl class="fields">
+        <div class="field">
+            <dt>Project</dt>
+            <dd>{task.project_name}</dd>
+        </div>
 
-        <dt>Description</dt>
-        <dd>{task.description || 'No description'}</dd>
+        <div class="field">
+            <dt>Status</dt>
+            <dd>
+                <StatusCapsule taskId={task.id} status={task.status} onSaved={load} />
+            </dd>
+        </div>
 
-        <dt>Status</dt>
-        <dd>
-            <span
-                style="
-                    padding: 3px 8px;
-                    border-radius: 3px;
-                    background: {task.status === 'done'
-                    ? '#d4edda'
-                    : task.status === 'in_progress'
-                      ? '#cce5ff'
-                      : '#f8f9fa'};
-                    color: {task.status === 'done'
-                    ? '#155724'
-                    : task.status === 'in_progress'
-                      ? '#004085'
-                      : '#6c757d'};
-                "
-            >
-                {task.status === 'done'
-                    ? 'Done'
-                    : task.status === 'in_progress'
-                      ? 'In Progress'
-                      : 'To Do'}
-            </span>
-        </dd>
-
-        <dt>Assignee</dt>
-        <dd>{task.assignee_email}</dd>
-
-        <dt>Due date</dt>
-        <dd>
-            {#if task.due_date}
-                {new Date(task.due_date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                })}
-                {#if new Date(task.due_date) < new Date() && task.status !== 'done'}
-                    <strong style="color: red;">
-                        ({Math.floor(
-                            (new Date().getTime() - new Date(task.due_date).getTime()) /
-                                (1000 * 60 * 60 * 24)
-                        )} days overdue)
-                    </strong>
+        <div class="field">
+            <dt>Assignee</dt>
+            <dd>
+                {#if task.assignee_email}
+                    <span title={task.assignee_email}>
+                        {task.assignee_name ?? task.assignee_email}
+                    </span>
+                {:else}
+                    <em>Unassigned</em>
                 {/if}
-            {:else}
-                <em>No due date set</em>
-            {/if}
-        </dd>
+            </dd>
+        </div>
+
+        <div class="field">
+            <dt>Due date</dt>
+            <dd>
+                {#if task.due_date}
+                    {formatDate(task.due_date, 'long')}
+                    {#if overdueDays}
+                        <Capsule variant="overdue">
+                            {overdueDays} {overdueDays === 1 ? 'day' : 'days'} overdue
+                        </Capsule>
+                    {/if}
+                {:else}
+                    <em>No due date set</em>
+                {/if}
+            </dd>
+        </div>
+
+        <div class="field field--wide">
+            <dt>Description</dt>
+            <dd>{task.description || 'No description'}</dd>
+        </div>
     </dl>
 
-    <h2>Update status</h2>
-
-    <select bind:value={selectedStatus}>
-        <option value="todo">To Do</option>
-        <option value="in_progress">In Progress</option>
-        <option value="done">Done</option>
-    </select>
-    <button onclick={save} disabled={saving}>Update</button>
-
-    {#if selectedStatus === 'done' && !task.assignee}
-        <p>This task has no assignee.</p>
-    {/if}
-
-    <h2>Comments ({task.comments.length})</h2>
-
-    <ul>
-        {#each task.comments as comment (comment.id)}
-            <li>
-                <strong>{comment.author_email}</strong>
-                <p>{comment.text}</p>
-            </li>
-        {:else}
-            <li>No comments yet.</li>
-        {/each}
-    </ul>
+    <TaskComments taskId={task.id} bind:comments={task.comments} />
+{:else if loadError}
+    <p class="text-danger" role="alert">{loadError}</p>
+{:else}
+    <p class="text-muted">Loading…</p>
 {/if}
+
+<style>
+    .fields {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem 2rem;
+        margin: 0 0 1.5rem;
+    }
+
+    .field {
+        flex: 1 1 12rem;
+        min-width: 0;
+    }
+
+    .field--wide {
+        flex-basis: 100%;
+    }
+
+    .field dt {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+    }
+
+    .field dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+    }
+</style>

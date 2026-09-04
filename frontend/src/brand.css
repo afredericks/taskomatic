@@ -1,0 +1,718 @@
+/* ==========================================================================
+   TinyPM brand.css
+   Baseline colour scheme and glass surfaces for the whole application.
+
+   How theming works
+   -----------------
+   Every colour token is written once as light-dark(<light>, <dark>) and the
+   browser picks a side from the element's `color-scheme`:
+
+       <html>                     follows the operating-system preference
+       <html data-theme="light">  forces light
+       <html data-theme="dark">   forces dark
+
+   To let one region use the other scheme, set `color-scheme: dark` (or
+   `light`) on that element; every token re-resolves underneath it.
+
+   Brand variants (section 3) repaint the palette:
+
+       <html data-brand="midnight">   indigo and ice, dark foundation
+       <html data-brand="red-alert">  klaxon red and amber, dark foundation
+       <html data-brand="chrome">     brushed steel, light foundation
+       <html data-brand="daybreak">   sunrise gold and rose, light foundation
+
+   A variant's foundation supplies the scheme until data-theme forces one.
+
+   Rebranding
+   ----------
+   The palette is built in OKLCH from the hue tokens at the top of :root.
+   Change a hue and every tint, text colour and gradient follows.
+
+   Needs light-dark(), oklch() and color-mix():
+   Chrome 123, Safari 17.5, Firefox 120 and later.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Scheme switch
+   -------------------------------------------------------------------------- */
+
+:root {
+    color-scheme: light dark;
+}
+
+:root[data-theme='light'] {
+    color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+    color-scheme: dark;
+}
+
+/* --------------------------------------------------------------------------
+   2. Design tokens
+   -------------------------------------------------------------------------- */
+
+:root {
+    /* Hues (OKLCH degrees). The whole palette hangs off these. */
+    --hue-primary: 285; /* electric violet */
+    --hue-accent: 340; /* hot magenta */
+    --hue-info: 220; /* azure */
+    --hue-success: 155; /* emerald */
+    --hue-warning: 78; /* amber */
+    --hue-danger: 25; /* coral */
+
+    /* Brand and semantic colours. Vivid chroma, lifted a little in dark. */
+    --primary: light-dark(
+        oklch(58% 0.25 var(--hue-primary)),
+        oklch(72% 0.2 var(--hue-primary))
+    );
+    --accent: light-dark(
+        oklch(62% 0.26 var(--hue-accent)),
+        oklch(74% 0.2 var(--hue-accent))
+    );
+    --info: light-dark(
+        oklch(60% 0.15 var(--hue-info)),
+        oklch(76% 0.13 var(--hue-info))
+    );
+    --success: light-dark(
+        oklch(60% 0.17 var(--hue-success)),
+        oklch(76% 0.16 var(--hue-success))
+    );
+    --warning: light-dark(
+        oklch(72% 0.17 var(--hue-warning)),
+        oklch(82% 0.16 var(--hue-warning))
+    );
+    --danger: light-dark(
+        oklch(58% 0.22 var(--hue-danger)),
+        oklch(72% 0.19 var(--hue-danger))
+    );
+
+    /* Readable text in each hue, for use on top of the soft tints below. */
+    --primary-text: light-dark(
+        oklch(42% 0.22 var(--hue-primary)),
+        oklch(86% 0.1 var(--hue-primary))
+    );
+    --accent-text: light-dark(
+        oklch(44% 0.22 var(--hue-accent)),
+        oklch(86% 0.1 var(--hue-accent))
+    );
+    --info-text: light-dark(
+        oklch(40% 0.13 var(--hue-info)),
+        oklch(86% 0.08 var(--hue-info))
+    );
+    --success-text: light-dark(
+        oklch(38% 0.13 var(--hue-success)),
+        oklch(86% 0.1 var(--hue-success))
+    );
+    --warning-text: light-dark(
+        oklch(42% 0.12 var(--hue-warning)),
+        oklch(88% 0.1 var(--hue-warning))
+    );
+    --danger-text: light-dark(
+        oklch(42% 0.19 var(--hue-danger)),
+        oklch(86% 0.09 var(--hue-danger))
+    );
+
+    /* Translucent tints for badges, pills and callouts. */
+    --primary-soft: color-mix(in oklch, var(--primary) 18%, transparent);
+    --accent-soft: color-mix(in oklch, var(--accent) 18%, transparent);
+    --info-soft: color-mix(in oklch, var(--info) 18%, transparent);
+    --success-soft: color-mix(in oklch, var(--success) 18%, transparent);
+    --warning-soft: color-mix(in oklch, var(--warning) 22%, transparent);
+    --danger-soft: color-mix(in oklch, var(--danger) 18%, transparent);
+
+    /* Task status aliases. Components should reach for these, not raw hues. */
+    --status-todo: light-dark(
+        oklch(55% 0.03 var(--hue-primary)),
+        oklch(72% 0.03 var(--hue-primary))
+    );
+    --status-todo-text: light-dark(
+        oklch(38% 0.04 var(--hue-primary)),
+        oklch(90% 0.02 var(--hue-primary))
+    );
+    --status-in-progress: var(--info);
+    --status-in-progress-text: var(--info-text);
+    --status-done: var(--success);
+    --status-done-text: var(--success-text);
+    --status-overdue: var(--danger);
+    --status-overdue-text: var(--danger-text);
+
+    /* Page backdrop: a deep base with three aurora blobs painted over it. */
+    --bg: light-dark(
+        oklch(97% 0.012 var(--hue-primary)),
+        oklch(13% 0.03 var(--hue-primary))
+    );
+    --blob-1: light-dark(
+        oklch(78% 0.16 var(--hue-primary) / 0.55),
+        oklch(42% 0.2 var(--hue-primary) / 0.5)
+    );
+    --blob-2: light-dark(
+        oklch(82% 0.15 var(--hue-accent) / 0.45),
+        oklch(42% 0.2 var(--hue-accent) / 0.38)
+    );
+    --blob-3: light-dark(
+        oklch(85% 0.12 var(--hue-info) / 0.5),
+        oklch(48% 0.14 var(--hue-info) / 0.38)
+    );
+
+    /* Glass surfaces. */
+    --glass-bg: light-dark(
+        oklch(100% 0 0 / 0.52),
+        oklch(28% 0.03 var(--hue-primary) / 0.45)
+    );
+    --glass-bg-strong: light-dark(
+        oklch(100% 0 0 / 0.72),
+        oklch(26% 0.03 var(--hue-primary) / 0.68)
+    );
+    --glass-border: light-dark(oklch(100% 0 0 / 0.65), oklch(100% 0 0 / 0.12));
+    --glass-highlight: light-dark(oklch(100% 0 0 / 0.85), oklch(100% 0 0 / 0.16));
+    --glass-shadow: light-dark(
+        oklch(30% 0.1 var(--hue-primary) / 0.14),
+        oklch(0% 0 0 / 0.5)
+    );
+    --glass-blur: 16px;
+    --surface-hover: light-dark(oklch(100% 0 0 / 0.35), oklch(100% 0 0 / 0.05));
+
+    /* Text. */
+    --text: light-dark(
+        oklch(20% 0.03 var(--hue-primary)),
+        oklch(96% 0.01 var(--hue-primary))
+    );
+    --text-muted: light-dark(
+        oklch(44% 0.03 var(--hue-primary)),
+        oklch(76% 0.02 var(--hue-primary))
+    );
+    --text-faint: light-dark(
+        oklch(58% 0.03 var(--hue-primary)),
+        oklch(60% 0.02 var(--hue-primary))
+    );
+    --text-on-brand: oklch(99% 0 0);
+
+    /* Hairlines. */
+    --border: light-dark(
+        oklch(30% 0.05 var(--hue-primary) / 0.12),
+        oklch(100% 0 0 / 0.1)
+    );
+    --border-strong: light-dark(
+        oklch(30% 0.05 var(--hue-primary) / 0.24),
+        oklch(100% 0 0 / 0.2)
+    );
+
+    /* Interaction. */
+    --link: var(--primary);
+    --link-hover: var(--accent);
+    --ring: color-mix(in oklch, var(--primary) 55%, transparent);
+
+    /* Gradients. */
+    --gradient-brand: linear-gradient(135deg, var(--primary), var(--accent));
+    --gradient-brand-soft: linear-gradient(135deg, var(--primary-soft), var(--accent-soft));
+
+    /* Shape, depth, type, motion. */
+    --radius-sm: 8px;
+    --radius: 14px;
+    --radius-lg: 22px;
+    --radius-pill: 999px;
+    --shadow-sm: 0 1px 2px var(--glass-shadow);
+    --shadow: 0 8px 32px var(--glass-shadow);
+    --shadow-lg: 0 20px 60px var(--glass-shadow);
+    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+    --ease: 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   3. Brand theme variants
+   Each variant moves the hue tokens, so every tint, text colour and gradient
+   in section 2 follows along. All of them still resolve light-dark() both
+   ways, so any variant works under either scheme; the :not([data-theme])
+   rule applies the variant's foundation until the user forces a mode.
+   -------------------------------------------------------------------------- */
+
+/* Midnight: indigo and ice under a deep navy night. */
+:root[data-brand='midnight'] {
+    --hue-primary: 265;
+    --hue-accent: 210;
+    --hue-info: 190;
+}
+
+:root[data-brand='midnight']:not([data-theme]) {
+    color-scheme: dark;
+}
+
+/* Red Alert: klaxon red and amber; danger shifts to crimson to stay legible
+   against the red brand colours. */
+:root[data-brand='red-alert'] {
+    --hue-primary: 20;
+    --hue-accent: 50;
+    --hue-danger: 350;
+}
+
+:root[data-brand='red-alert']:not([data-theme]) {
+    color-scheme: dark;
+}
+
+/* Chrome: brushed steel. Hues cool off and the brand colours and backdrop
+   flatten to near-monochrome; semantic colours keep their chroma. */
+:root[data-brand='chrome'] {
+    --hue-primary: 240;
+    --hue-accent: 255;
+
+    --primary: light-dark(
+        oklch(48% 0.06 var(--hue-primary)),
+        oklch(78% 0.05 var(--hue-primary))
+    );
+    --accent: light-dark(
+        oklch(60% 0.07 var(--hue-accent)),
+        oklch(86% 0.04 var(--hue-accent))
+    );
+    --primary-text: light-dark(
+        oklch(38% 0.05 var(--hue-primary)),
+        oklch(88% 0.03 var(--hue-primary))
+    );
+    --accent-text: light-dark(
+        oklch(40% 0.05 var(--hue-accent)),
+        oklch(88% 0.03 var(--hue-accent))
+    );
+    --blob-1: light-dark(
+        oklch(82% 0.03 var(--hue-primary) / 0.6),
+        oklch(45% 0.04 var(--hue-primary) / 0.5)
+    );
+    --blob-2: light-dark(
+        oklch(88% 0.02 var(--hue-accent) / 0.5),
+        oklch(45% 0.03 var(--hue-accent) / 0.38)
+    );
+    --blob-3: light-dark(
+        oklch(90% 0.02 var(--hue-info) / 0.55),
+        oklch(50% 0.03 var(--hue-info) / 0.38)
+    );
+}
+
+:root[data-brand='chrome']:not([data-theme]) {
+    color-scheme: light;
+}
+
+/* Daybreak: sunrise gold and rose under a morning sky. */
+:root[data-brand='daybreak'] {
+    --hue-primary: 45;
+    --hue-accent: 355;
+    --hue-info: 230;
+}
+
+:root[data-brand='daybreak']:not([data-theme]) {
+    color-scheme: light;
+}
+
+/* --------------------------------------------------------------------------
+   4. Base elements
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100dvh;
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    color: var(--text);
+    background-color: var(--bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Aurora backdrop. Fixed so the glass has something to blur while scrolling. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(circle 34rem at 12% 8%, var(--blob-1), transparent 70%),
+        radial-gradient(circle 30rem at 88% 14%, var(--blob-2), transparent 70%),
+        radial-gradient(circle 38rem at 55% 105%, var(--blob-3), transparent 70%);
+}
+
+::selection {
+    background: color-mix(in oklch, var(--primary) 30%, transparent);
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    margin: 0 0 0.5em;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    font-weight: 700;
+}
+
+h1 {
+    width: fit-content;
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+h2 {
+    font-size: 1.35rem;
+    margin-top: 2rem;
+}
+
+p {
+    margin: 0 0 1em;
+}
+
+a {
+    color: var(--link);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: color var(--ease), text-decoration-color var(--ease);
+}
+
+a:hover {
+    color: var(--link-hover);
+    text-decoration-color: currentColor;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 1.5rem 0;
+}
+
+code,
+pre,
+kbd {
+    font-family: var(--font-mono);
+    font-size: 0.925em;
+}
+
+em {
+    color: var(--text-muted);
+}
+
+dl {
+    margin: 0;
+}
+
+dt {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+dd {
+    margin: 0.25rem 0 0;
+}
+
+/* Form controls: frosted by default, so they sit on any part of the aurora. */
+button,
+select,
+input,
+textarea {
+    font: inherit;
+    color: var(--text);
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    background: var(--glass-bg-strong);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-sm);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+    transition:
+        border-color var(--ease),
+        box-shadow var(--ease),
+        background-color var(--ease);
+}
+
+button,
+select {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+button:hover,
+select:hover {
+    border-color: var(--border-strong);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), 0 0 0 3px var(--ring);
+}
+
+button:disabled,
+select:disabled,
+input:disabled,
+textarea:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-primary {
+    color: var(--text-on-brand);
+    background: var(--gradient-brand);
+    border-color: transparent;
+    box-shadow: 0 6px 20px color-mix(in oklch, var(--primary) 35%, transparent);
+}
+
+.btn-primary:hover {
+    filter: brightness(1.08);
+    border-color: transparent;
+    box-shadow: 0 8px 26px color-mix(in oklch, var(--primary) 45%, transparent);
+}
+
+label {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Tables become a single glass card. */
+table {
+    width: 100%;
+    margin: 1.25rem 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    background: var(--glass-bg);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+}
+
+th,
+td {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: var(--surface-hover);
+}
+
+tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+tbody td {
+    transition: background-color var(--ease);
+}
+
+tbody tr:hover td {
+    background: var(--surface-hover);
+}
+
+/* --------------------------------------------------------------------------
+   5. Reusable pieces
+   -------------------------------------------------------------------------- */
+
+/* Frosted panel. Add .glass--strong for more opacity, .card for padding. */
+.glass,
+.card {
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    background: var(--glass-bg);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+}
+
+.glass--strong {
+    background: var(--glass-bg-strong);
+}
+
+.card {
+    padding: 1.25rem 1.5rem;
+}
+
+/* Status pill: a small glass capsule tinted by its status colour.
+   Set --badge-color / --badge-text, or use a modifier below. */
+.badge {
+    --badge-color: var(--status-todo);
+    --badge-text: var(--status-todo-text);
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.2em 0.7em 0.2em 0.6em;
+    border-radius: var(--radius-pill);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    color: var(--badge-text);
+    background: color-mix(in oklch, var(--badge-color) 18%, transparent);
+    border: 1px solid color-mix(in oklch, var(--badge-color) 35%, transparent);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-sm);
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+}
+
+.badge::before {
+    content: '';
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--badge-color);
+    box-shadow: 0 0 8px var(--badge-color);
+}
+
+.badge--todo {
+    --badge-color: var(--status-todo);
+    --badge-text: var(--status-todo-text);
+}
+
+.badge--in-progress {
+    --badge-color: var(--status-in-progress);
+    --badge-text: var(--status-in-progress-text);
+}
+
+.badge--done {
+    --badge-color: var(--status-done);
+    --badge-text: var(--status-done-text);
+}
+
+.badge--overdue {
+    --badge-color: var(--status-overdue);
+    --badge-text: var(--status-overdue-text);
+}
+
+.badge--primary {
+    --badge-color: var(--primary);
+    --badge-text: var(--primary-text);
+}
+
+.badge--warning {
+    --badge-color: var(--warning);
+    --badge-text: var(--warning-text);
+}
+
+/* Text helpers. */
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* For screen readers only: labels that the layout shows some other way. */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.text-faint {
+    color: var(--text-faint);
+}
+
+.text-success {
+    color: var(--success-text);
+}
+
+.text-warning {
+    color: var(--warning-text);
+}
+
+.text-danger {
+    color: var(--danger-text);
+}
+
+.gradient-text {
+    width: fit-content;
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   6. Environment and accessibility fallbacks
+   -------------------------------------------------------------------------- */
+
+/* No backdrop blur: make the glass nearly opaque so text stays legible. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :root {
+        --glass-bg: light-dark(
+            oklch(100% 0 0 / 0.9),
+            oklch(24% 0.03 var(--hue-primary) / 0.92)
+        );
+        --glass-bg-strong: light-dark(
+            oklch(100% 0 0 / 0.96),
+            oklch(24% 0.03 var(--hue-primary) / 0.97)
+        );
+    }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    :root {
+        --glass-blur: 0px;
+        --glass-bg: light-dark(oklch(100% 0 0), oklch(22% 0.03 var(--hue-primary)));
+        --glass-bg-strong: light-dark(oklch(100% 0 0), oklch(22% 0.03 var(--hue-primary)));
+        --surface-hover: light-dark(
+            oklch(96% 0.01 var(--hue-primary)),
+            oklch(28% 0.03 var(--hue-primary))
+        );
+    }
+}
+
+@media (prefers-contrast: more) {
+    :root {
+        --border: light-dark(
+            oklch(30% 0.05 var(--hue-primary) / 0.4),
+            oklch(100% 0 0 / 0.35)
+        );
+        --border-strong: light-dark(
+            oklch(30% 0.05 var(--hue-primary) / 0.6),
+            oklch(100% 0 0 / 0.55)
+        );
+        --glass-border: var(--border-strong);
+        --text-muted: var(--text);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}

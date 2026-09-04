@@ -7,3 +7,6 @@ staticfiles
 # Frontend
 node_modules
 src/tinypm/static/dist/
+
+# IDEs
+.idea/

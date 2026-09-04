@@ -54,6 +54,33 @@ cd ../src/tinypm
 DJANGO_VITE_DEV_MODE=False uv run python manage.py runserver
 ```
 
+## Filtering the task list
+
+The task list at `/pm/app/tasks/` filters itself
+from its query string,
+one parameter per filter.
+Each parameter names a grid column,
+optionally followed by an operator and a value type
+separated by double underscores:
+
+```text
+/pm/app/tasks/?status=done
+/pm/app/tasks/?title__contains=login&assignee_email__empty=
+/pm/app/tasks/?due_date__lt__date=today&status__neq=done
+```
+
+Operators: `eq` (the default), `neq`, `contains`, `startsWith`,
+`lt`, `lte`, `gt`, `gte`, `in` (comma-separated), `empty` and `notEmpty`.
+Value types: `text` (the default, case-insensitive), `number`, `date` and `boolean`.
+The `due_date` and `comment_count` columns already compare as
+a date and a number, so the type can be left off for them.
+Dates accept the literal `today`.
+
+The dashboard's tiles, panels and project rows
+link to the task list with the matching filters,
+and `frontend/src/lib/filters.ts` holds the parsing,
+matching and link-building helpers.
+
 ## Tests
 
 ```console

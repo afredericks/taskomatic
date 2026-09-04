@@ -1,33 +1,44 @@
 <script lang="ts">
+    import AddTask from './lib/AddTask.svelte'
+    import AppHeader from './lib/AppHeader.svelte'
+    import Home from './lib/Home.svelte'
+    import PagePanel from './lib/PagePanel.svelte'
+    import { matchRoute } from './lib/routes'
+    import Settings from './lib/Settings.svelte'
     import TaskDetail from './lib/TaskDetail.svelte'
     import TaskList from './lib/TaskList.svelte'
+    import Toasts from './lib/Toasts.svelte'
 
-    const match = window.location.pathname.match(/\/pm\/app\/tasks\/(\d+)/)
-    const taskId = match ? Number(match[1]) : null
+    // Every page is a full load, so the route is settled once at startup.
+    const route = matchRoute(window.location.pathname)
 </script>
 
-<main>
-    {#if taskId}
-        <TaskDetail id={taskId} />
-    {:else}
-        <TaskList />
-    {/if}
-</main>
+<div class="app">
+    <AppHeader {route} />
+
+    <PagePanel>
+        {#if route?.page === 'new-task'}
+            <AddTask />
+        {:else if route?.page === 'task'}
+            <TaskDetail id={route.id} />
+        {:else if route?.page === 'tasks'}
+            <TaskList />
+        {:else if route?.page === 'settings'}
+            <Settings />
+        {:else}
+            <Home />
+        {/if}
+    </PagePanel>
+
+    <Toasts />
+</div>
 
 <style>
-    main {
-        font-family: sans-serif;
-        margin: 2rem;
-    }
-
-    main :global(table) {
-        border-collapse: collapse;
-    }
-
-    main :global(th),
-    main :global(td) {
-        border: 1px solid #ddd;
-        padding: 4px 8px;
-        text-align: left;
+    /* Typography, tables and colours come from brand.css; this is layout only.
+       The column pins the header while PagePanel scrolls the page body. */
+    .app {
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
     }
 </style>

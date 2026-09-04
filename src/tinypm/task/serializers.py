@@ -1,6 +1,21 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import Comment, Project, Task
+
+User = get_user_model()
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """A user as the assignee picker needs it."""
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'name']
+
+    def get_name(self, obj):
+        return obj.get_full_name() or obj.username
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -16,18 +31,37 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     author_email = serializers.SerializerMethodField()
+    author_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ['id', 'text', 'author_email', 'created_at']
+        fields = ['id', 'text', 'author', 'author_email', 'author_name', 'created_at']
 
     def get_author_email(self, obj):
         return obj.author.email
+
+    def get_author_name(self, obj):
+        return obj.author.get_full_name() or obj.author.username
+
+
+class CommentWriteSerializer(serializers.ModelSerializer):
+    """Serializer for posting a comment. The task and author come from the request."""
+
+    class Meta:
+        model = Comment
+        fields = ['text']
+
+    def validate_text(self, value):
+        value = value.strip()
+        if len(value) < 5:
+            raise serializers.ValidationError("Comment must be at least 5 characters.")
+        return value
 
 
 class TaskSerializer(serializers.ModelSerializer):
     project_name = serializers.SerializerMethodField()
     assignee_email = serializers.SerializerMethodField()
+    assignee_name = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True, read_only=True)
     comment_count = serializers.SerializerMethodField()
 
@@ -35,7 +69,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = [
             'id', 'title', 'description', 'status', 'due_date',
-            'project', 'project_name', 'assignee', 'assignee_email',
+            'project', 'project_name', 'assignee', 'assignee_email', 'assignee_name',
             'comments', 'comment_count', 'created_at', 'updated_at'
         ]
 
@@ -45,6 +79,11 @@ class TaskSerializer(serializers.ModelSerializer):
     def get_assignee_email(self, obj):
         if obj.assignee:
             return obj.assignee.email
+        return None
+
+    def get_assignee_name(self, obj):
+        if obj.assignee:
+            return obj.assignee.get_full_name() or obj.assignee.username
         return None
 
     def get_comment_count(self, obj):
