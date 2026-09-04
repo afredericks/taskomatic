@@ -38,6 +38,28 @@ ALLOWED_HOSTS = env.list(
     default=['localhost', '127.0.0.1', '0.0.0.0'],
 )
 
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[])
+
+# Hosting on Render: the platform publishes the service's hostname, so
+# trust it without any per-deploy configuration.
+# https://render.com/docs/environment-variables
+RENDER_EXTERNAL_HOSTNAME = env.str('RENDER_EXTERNAL_HOSTNAME', default='')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
+
+# Behind a TLS-terminating proxy the request reaches Django over plain
+# HTTP and X-Forwarded-Proto carries the original scheme. Without this
+# the CSRF origin check fails and every POST from the frontend is rejected.
+BEHIND_TLS_PROXY = env.bool(
+    'BEHIND_TLS_PROXY',
+    default=bool(RENDER_EXTERNAL_HOSTNAME),
+)
+if BEHIND_TLS_PROXY:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 
 # Application definition
 
@@ -61,6 +83,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -169,3 +192,16 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# WhiteNoise serves the collected files itself, gzipped, so production
+# needs no separate static file server. The Vite bundle already carries
+# content hashes in its filenames, so the manifest storage is not needed.
+# In DEBUG mode WhiteNoise serves straight from STATICFILES_DIRS.
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    },
+}

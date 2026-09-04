@@ -19,9 +19,20 @@ class Command(BaseCommand):
             action='store_true',
             help='Clear existing data before seeding',
         )
+        parser.add_argument(
+            '--if-empty',
+            action='store_true',
+            help='Do nothing when the database already has projects',
+        )
 
     def handle(self, *args, **options):
         User = get_user_model()
+
+        # Comments are appended on every run, so a deploy that reseeds on
+        # each start needs a way to leave an existing database alone.
+        if options['if_empty'] and Project.objects.exists():
+            self.stdout.write('Database already seeded; skipping.')
+            return
 
         # Fixed seed so every candidate sees the same board.
         seed(20260713)

@@ -105,6 +105,51 @@ uv run python manage.py mark_overdue
 uv run python manage.py createsuperuser
 ```
 
+## Deploying to Render
+
+The `Dockerfile` builds the frontend,
+collects the static files,
+and serves everything from one gunicorn process,
+with WhiteNoise handling the static files.
+`render.yaml` describes the matching Render web service.
+
+1. Push the repository to GitHub.
+2. In the Render dashboard choose **New → Blueprint**
+   and pick the repository.
+   Render reads `render.yaml`,
+   creates the service on the free plan,
+   and generates a `SECRET_KEY`.
+3. Open `https://<service-name>.onrender.com/pm/app/`.
+
+On start the container runs the migrations,
+seeds the demo data when the database is empty,
+and binds gunicorn to Render's `PORT`.
+
+Things to know about the free plan:
+
+- The service sleeps after fifteen minutes without traffic
+  and takes about a minute to wake.
+- The filesystem is wiped on every restart,
+  so the SQLite database, and any edits, are lost each time.
+  The seed runs again and the demo board comes back.
+- The API accepts anonymous writes,
+  so anyone with the link can change the data.
+
+To keep data between restarts,
+set `DATABASE_URL` in the service's environment
+to a PostgreSQL URL;
+Neon and Supabase offer free databases,
+and `psycopg` is already installed.
+
+### Running the production image locally
+
+```console
+docker build -t tinypm .
+docker run --rm -p 8000:8000 -e DEBUG=False tinypm
+```
+
+Then open <http://localhost:8000/pm/app/>.
+
 ## Layout
 
 | Path                             | Contents                                         |

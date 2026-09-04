@@ -1,0 +1,23 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# In the Render dashboard choose New -> Blueprint and pick this
+# repository; Render creates the service described here.
+services:
+  - type: web
+    name: tinypm
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    autoDeployTrigger: commit
+    envVars:
+      # Render generates a random value on the first deploy.
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: WEB_CONCURRENCY
+        value: "2"
+      # Seed the demo board whenever the database is empty, which on the
+      # free plan is every restart.
+      - key: SEED_ON_START
+        value: "true"
