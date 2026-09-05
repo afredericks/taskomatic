@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './Toasts.css'
+
     import { dismissToast, toasts } from './toast.svelte'
 </script>
 
@@ -17,58 +19,3 @@
         </div>
     {/each}
 </div>
-
-<style>
-    .toasts {
-        position: fixed;
-        right: 1.25rem;
-        bottom: 1.25rem;
-        z-index: 100;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-        pointer-events: none;
-    }
-
-    .toast {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        min-width: 14rem;
-        max-width: 24rem;
-        padding: 0.7rem 0.7rem 0.7rem 1rem;
-        pointer-events: auto;
-        border: 1px solid var(--glass-border);
-        border-left: 3px solid var(--success);
-        border-radius: var(--radius);
-        background: var(--glass-bg-strong);
-        box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-lg);
-        -webkit-backdrop-filter: blur(var(--glass-blur));
-        backdrop-filter: blur(var(--glass-blur));
-        animation: toast-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    .toast--danger {
-        border-left-color: var(--danger);
-    }
-
-    @keyframes toast-in {
-        from {
-            opacity: 0;
-            transform: translateX(1.5rem);
-        }
-    }
-
-    .message {
-        flex: 1;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    .dismiss {
-        padding: 0.2rem 0.55rem;
-        border-radius: var(--radius-pill);
-        line-height: 1;
-        font-size: 0.8rem;
-    }
-</style>

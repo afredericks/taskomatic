@@ -1,0 +1,342 @@
+/* The dashboard. Everything is scoped under .home, the page's wrapper. */
+.home .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: 1rem;
+}
+
+.home .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.1rem 1.25rem;
+    color: inherit;
+    text-decoration: none;
+    transition:
+        transform var(--ease),
+        border-color var(--ease),
+        box-shadow var(--ease);
+}
+
+.home .stat:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-strong);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-lg);
+    text-decoration: none;
+}
+
+.home .value {
+    font-size: 2.2rem;
+    font-weight: var(--weight-bold);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.home .label {
+    font-size: 0.8rem;
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.home .card h2 {
+    margin-top: 0;
+    font-size: 1.05rem;
+}
+
+.home .completion {
+    margin-top: 1rem;
+}
+
+.home .completion-header,
+.home .panel-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.home .percent {
+    font-size: 1.4rem;
+    font-weight: var(--weight-bold);
+}
+
+.home .completion p {
+    margin: 0.6rem 0 0;
+    font-size: 0.875rem;
+}
+
+.home .completion p a {
+    color: inherit;
+}
+
+.home .view-all {
+    font-size: 0.8rem;
+    font-weight: var(--weight-bold);
+    white-space: nowrap;
+}
+
+.home .panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.home .progress {
+    height: 0.6rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--surface-hover);
+}
+
+.home .progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: var(--gradient-brand);
+    transition: width var(--ease);
+}
+
+.home .due-list,
+.home .project-list {
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.home .project-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* One grid for the whole list, so the status and due columns line up
+   across rows instead of drifting with each label's width. */
+.home .due-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.home .due-list li {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    align-items: center;
+}
+
+.home .due-list li > a:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Capsules sit flush left in their column rather than stretching to the widest one. */
+.home .due-list li > .badge {
+    justify-self: start;
+}
+
+.home .due-date {
+    font-size: 0.8rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.home .project-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: var(--weight-regular);
+}
+
+.home .project-meta a {
+    text-decoration: none;
+}
+
+.home .project-meta a:hover {
+    text-decoration: underline;
+}
+
+.home .project-meta a:first-child {
+    color: var(--text);
+}
+
+.home .project-meta a:first-child:hover,
+.home .project-meta a.text-faint:hover {
+    color: var(--link-hover);
+}
+
+/* Scoreboard: one row per assignee. */
+.home .scoreboard {
+    --avatar-size: 1.75rem;
+
+    margin-top: 1rem;
+}
+
+.home .table-scroll {
+    overflow-x: auto;
+}
+
+/* brand.css dresses tables as their own glass card; inside a card, go flat. */
+.home .scoreboard table {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+.home .scoreboard th {
+    padding: 0.4rem 0.75rem;
+    background: transparent;
+}
+
+.home .scoreboard td {
+    padding: 0.55rem 0.75rem;
+}
+
+.home .scoreboard th:first-child,
+.home .scoreboard td:first-child {
+    padding-left: 0.25rem;
+}
+
+.home .scoreboard th:last-child,
+.home .scoreboard td:last-child {
+    padding-right: 0.25rem;
+}
+
+/* Ranks sit quietly in regular weight; the leader is bold and branded. */
+.home .rank {
+    width: 2rem;
+    font-weight: var(--weight-regular);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-faint);
+}
+
+.home .leader {
+    font-weight: var(--weight-bold);
+    color: var(--primary-text);
+}
+
+.home .num {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Column key: a glowing dot and its label as one flex row, so the dot
+   centres on the uppercase label rather than hanging off its baseline. */
+.home .key {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+}
+
+/* The dots echo the status capsules' glow. */
+.home .dot {
+    --dot: var(--status-todo);
+
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--dot);
+    box-shadow: 0 0 6px var(--dot);
+}
+
+.home .dot--in-progress {
+    --dot: var(--status-in-progress);
+}
+
+.home .dot--done {
+    --dot: var(--status-done);
+}
+
+.home .dot--overdue {
+    --dot: var(--status-overdue);
+}
+
+.home .person {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: var(--weight-bold);
+    color: var(--text);
+    text-decoration: none;
+}
+
+.home .person:hover {
+    color: var(--link-hover);
+}
+
+.home .person-name {
+    white-space: nowrap;
+}
+
+.home .score {
+    display: inline-block;
+    min-width: 1.5rem;
+    font-weight: var(--weight-bold);
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+}
+
+.home .score:hover {
+    text-decoration: underline;
+}
+
+.home .score--todo {
+    color: var(--status-todo-text);
+}
+
+.home .score--in-progress {
+    color: var(--status-in-progress-text);
+}
+
+.home .score--done {
+    color: var(--status-done-text);
+}
+
+.home .score--overdue {
+    color: var(--status-overdue-text);
+}
+
+.home .score--zero {
+    font-weight: var(--weight-regular);
+    color: var(--text-faint);
+}
+
+.home .progress-col {
+    width: 30%;
+    min-width: 9rem;
+}
+
+.home .progress-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.home .progress-cell .progress {
+    flex: 1;
+}
+
+.home .percent-small {
+    min-width: 2.5rem;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.home .unassigned {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+}
+
+.home .unassigned a {
+    color: inherit;
+}

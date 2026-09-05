@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './TaskList.css'
+
     import { onMount } from 'svelte'
 
     import { getTasks, getUsers } from './api'
@@ -186,7 +188,7 @@
 
 <Modal bind:open={commentsOpen} title="Comments on “{commentsTask?.title ?? ''}”">
     {#if commentsTask?.comments.length}
-        <ul class="comments">
+        <ul class="comment-list">
             {#each commentsTask.comments as comment (comment.id)}
                 <li>
                     <div class="meta">
@@ -203,55 +205,3 @@
         <p><em>No comments yet.</em></p>
     {/if}
 </Modal>
-
-<style>
-    .filter-bar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.5rem 1rem;
-    }
-
-    .filter-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .clear-filters {
-        font-size: 0.875rem;
-    }
-
-    .comments {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .comments li {
-        padding: 0.75rem 1rem;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        background: var(--surface-hover);
-    }
-
-    .comments .meta {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        margin-bottom: 0.25rem;
-        font-size: 0.8rem;
-    }
-
-    .comments p {
-        margin: 0;
-        white-space: pre-wrap;
-        overflow-wrap: anywhere;
-    }
-</style>

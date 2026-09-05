@@ -1,0 +1,124 @@
+/* The settings page. Everything is scoped under .settings, the page's wrapper. */
+.settings .card {
+    max-width: 40rem;
+}
+
+.settings .card h2 {
+    margin-top: 0;
+}
+
+.settings .setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.settings .setting p {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+}
+
+/* Track and thumb; overrides the global glass button styling. */
+.settings .switch {
+    flex-shrink: 0;
+    width: 3.2rem;
+    height: 1.8rem;
+    padding: 3px;
+    border-radius: var(--radius-pill);
+    background: var(--glass-bg-strong);
+    transition: background var(--ease), border-color var(--ease);
+}
+
+.settings .switch::before {
+    content: '';
+    display: block;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: transform var(--ease), background var(--ease);
+}
+
+.settings .switch[aria-checked='true'] {
+    background: var(--gradient-brand);
+    border-color: transparent;
+}
+
+.settings .switch[aria-checked='true']::before {
+    background: var(--text-on-brand);
+    transform: translateX(1.4rem);
+}
+
+.settings .themes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    padding: 0;
+    border: 0;
+}
+
+.settings legend {
+    padding: 0;
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.settings .theme-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    background: var(--glass-bg);
+    cursor: pointer;
+    transition: border-color var(--ease), box-shadow var(--ease);
+}
+
+.settings .theme-card:hover {
+    border-color: var(--border-strong);
+}
+
+.settings .theme-card.selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--ring);
+}
+
+.settings .theme-card input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.settings .theme-card:has(input:focus-visible) {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.settings .swatches {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.settings .swatch {
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+}
+
+.settings .theme-name {
+    font-weight: var(--weight-bold);
+    color: var(--text);
+}
+
+.settings .foundation {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+}

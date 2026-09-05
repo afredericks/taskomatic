@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './TaskDetail.css'
+
     import { onMount } from 'svelte'
 
     import { getTask } from './api'
@@ -36,7 +38,7 @@
 
     <h1>{task.title}</h1>
 
-    <dl class="fields">
+    <dl class="task-fields">
         <div class="field">
             <dt>Project</dt>
             <dd>{task.project_name}</dd>
@@ -88,37 +90,5 @@
 {:else if loadError}
     <p class="text-danger" role="alert">{loadError}</p>
 {:else}
-    <p class="text-muted">Loading…</p>
+    <p class="text-muted text-light">Loading…</p>
 {/if}
-
-<style>
-    .fields {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem 2rem;
-        margin: 0 0 1.5rem;
-    }
-
-    .field {
-        flex: 1 1 12rem;
-        min-width: 0;
-    }
-
-    .field--wide {
-        flex-basis: 100%;
-    }
-
-    .field dt {
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: var(--text-muted);
-        margin-bottom: 0.25rem;
-    }
-
-    .field dd {
-        margin: 0;
-        overflow-wrap: anywhere;
-    }
-</style>

@@ -35,6 +35,8 @@
 </script>
 
 <script lang="ts" generics="Row">
+    import './Grid.css'
+
     import { applyFilters } from './filters'
     import { getPagePanel } from './pagePanel'
 
@@ -220,113 +222,3 @@
         {/each}
     </div>
 </div>
-
-<style>
-    /* The same glass card brand.css gives tables, on a flex column so the
-       body can be the part that scrolls. */
-    .grid {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        margin: 1.25rem 0;
-        overflow: hidden;
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius);
-        background: var(--glass-bg);
-        box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow);
-        -webkit-backdrop-filter: blur(var(--glass-blur));
-        backdrop-filter: blur(var(--glass-blur));
-    }
-
-    /* Fill mode: stretch into a flex-column parent and let the body scroll. */
-    .grid.fill {
-        flex: 1;
-        min-height: 0;
-        margin-bottom: 0;
-    }
-
-    .row {
-        display: grid;
-        grid-template-columns: var(--grid-columns);
-        align-items: center;
-    }
-
-    /* Every row is one line tall: cells never wrap, and a value that does
-       not fit its column is clipped with an ellipsis instead. */
-    .cell {
-        min-width: 0;
-        padding: 0.7rem 1rem;
-        text-align: left;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .header {
-        flex: none;
-        overflow: hidden;
-        border-bottom: 1px solid var(--border);
-        background: var(--surface-hover);
-    }
-
-    .header .cell {
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-    }
-
-    /* Header buttons read as plain header text. `all: unset` also drops the
-       global focus ring, so it is put back for keyboard users. */
-    .header button {
-        all: unset;
-        cursor: pointer;
-        font: inherit;
-        font-weight: bold;
-    }
-
-    .header button:focus-visible {
-        outline: 2px solid var(--primary);
-        outline-offset: 2px;
-        border-radius: 2px;
-    }
-
-    .sort-indicator {
-        font-size: 0.75em;
-    }
-
-    .body {
-        flex: 1;
-        min-height: 0;
-        overflow-y: auto;
-    }
-
-    /* Only a filling body can scroll. Reserve the scrollbar's space in both
-       row groups so a scrollbar never shifts the body's columns away from
-       the header's. (Safari before 18.2 ignores this; its scrollbars overlay.) */
-    .fill .header,
-    .fill .body {
-        scrollbar-gutter: stable;
-    }
-
-    /* The divider and hover tint belong to the row, so they run unbroken
-       across the full width however tall each cell's content is. */
-    .body .row {
-        border-bottom: 1px solid var(--border);
-        transition: background-color var(--ease);
-    }
-
-    .body .row:last-child {
-        border-bottom: 0;
-    }
-
-    .body .row:hover {
-        background: var(--surface-hover);
-    }
-
-    .empty .cell {
-        grid-column: 1 / -1;
-        text-align: center;
-    }
-</style>

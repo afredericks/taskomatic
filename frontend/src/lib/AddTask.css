@@ -1,0 +1,38 @@
+/* The add-task form. Every rule hangs off the form's own class so nothing
+   here reaches other pages' fields. */
+form.add-task {
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.add-task .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    width: 100%;
+}
+
+.add-task .field label {
+    font-size: 0.875rem;
+}
+
+.add-task .row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.add-task .row .field {
+    flex: 1;
+    min-width: 9rem;
+    width: auto;
+}
+
+.add-task .error {
+    margin: 0;
+    font-size: 0.875rem;
+}

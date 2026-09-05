@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './StatusCapsule.css'
+
     import { firstErrorMessage, updateTaskStatus } from './api'
     import Capsule from './Capsule.svelte'
     import { STATUSES, TASK_STATUSES, statusLabel, statusVariant } from './status'
@@ -121,66 +123,3 @@
         </div>
     {/if}
 </div>
-
-<style>
-    .status-field {
-        position: relative;
-        display: inline-block;
-    }
-
-    .chevron {
-        font-size: 0.7em;
-    }
-
-    /* Positioned from JS when opened; fixed also serves as the fallback when
-       the Popover API is unavailable. */
-    .status-menu {
-        position: fixed;
-        inset: auto;
-        z-index: 30;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        min-width: 11rem;
-        margin: 0;
-        padding: 0.4rem;
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-sm);
-        background: var(--glass-bg-strong);
-        box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow);
-        -webkit-backdrop-filter: blur(var(--glass-blur));
-        backdrop-filter: blur(var(--glass-blur));
-        animation: menu-in var(--ease);
-    }
-
-    @keyframes menu-in {
-        from {
-            opacity: 0;
-            transform: translateY(-4px);
-        }
-    }
-
-    /* Menu rows are transparent so the capsules carry the colour. */
-    .status-option {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-        padding: 0.35rem 0.5rem;
-        border: 0;
-        border-radius: var(--radius-sm);
-        background: transparent;
-        box-shadow: none;
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-    }
-
-    .status-option:hover {
-        background: var(--surface-hover);
-        box-shadow: none;
-    }
-
-    .current {
-        color: var(--text-muted);
-    }
-</style>

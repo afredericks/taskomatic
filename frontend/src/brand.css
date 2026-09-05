@@ -33,6 +33,29 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
+   0. Typeface
+   Roboto, self-hosted from @fontsource/roboto so Vite bundles the font
+   files. Only the faces the app uses are loaded: Light 300, Regular 400
+   and Bold 700, plus their italics for <em>, in the Latin and Latin
+   Extended subsets. Every weight in the app is one of the --weight-*
+   tokens below, and font-synthesis on <body> stops the browser faking
+   any other weight.
+   -------------------------------------------------------------------------- */
+
+@import '@fontsource/roboto/latin-300.css';
+@import '@fontsource/roboto/latin-ext-300.css';
+@import '@fontsource/roboto/latin-300-italic.css';
+@import '@fontsource/roboto/latin-ext-300-italic.css';
+@import '@fontsource/roboto/latin-400.css';
+@import '@fontsource/roboto/latin-ext-400.css';
+@import '@fontsource/roboto/latin-400-italic.css';
+@import '@fontsource/roboto/latin-ext-400-italic.css';
+@import '@fontsource/roboto/latin-700.css';
+@import '@fontsource/roboto/latin-ext-700.css';
+@import '@fontsource/roboto/latin-700-italic.css';
+@import '@fontsource/roboto/latin-ext-700-italic.css';
+
+/* --------------------------------------------------------------------------
    1. Scheme switch
    -------------------------------------------------------------------------- */
 
@@ -215,8 +238,11 @@
     --shadow-sm: 0 1px 2px var(--glass-shadow);
     --shadow: 0 8px 32px var(--glass-shadow);
     --shadow-lg: 0 20px 60px var(--glass-shadow);
-    --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif;
+    --font-sans: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
     --font-mono: ui-monospace, 'Cascadia Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+    --weight-light: 300;
+    --weight-regular: 400;
+    --weight-bold: 700;
     --ease: 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -320,6 +346,10 @@ body {
     margin: 0;
     min-height: 100dvh;
     font-family: var(--font-sans);
+    font-weight: var(--weight-regular);
+    /* Only Light, Regular and Bold are loaded; never fake a weight in between.
+       Italic may still be synthesised as a last resort. */
+    font-synthesis: style;
     line-height: 1.5;
     color: var(--text);
     background-color: var(--bg);
@@ -355,13 +385,12 @@ h4 {
     margin: 0 0 0.5em;
     line-height: 1.2;
     letter-spacing: -0.015em;
-    font-weight: 700;
+    font-weight: var(--weight-bold);
 }
 
 h1 {
     width: fit-content;
     font-size: 2rem;
-    font-weight: 800;
     background: var(--gradient-brand);
     -webkit-background-clip: text;
     background-clip: text;
@@ -379,7 +408,7 @@ p {
 
 a {
     color: var(--link);
-    font-weight: 500;
+    font-weight: var(--weight-regular);
     text-decoration: underline;
     text-decoration-color: transparent;
     text-underline-offset: 3px;
@@ -404,7 +433,9 @@ kbd {
     font-size: 0.925em;
 }
 
+/* Asides and placeholders: light italic in the muted colour. */
 em {
+    font-weight: var(--weight-light);
     color: var(--text-muted);
 }
 
@@ -415,7 +446,7 @@ dl {
 dt {
     margin-top: 1rem;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: var(--weight-bold);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -448,7 +479,7 @@ textarea {
 button,
 select {
     cursor: pointer;
-    font-weight: 600;
+    font-weight: var(--weight-bold);
 }
 
 button:hover,
@@ -489,7 +520,7 @@ textarea:disabled {
 
 label {
     color: var(--text-muted);
-    font-weight: 500;
+    font-weight: var(--weight-regular);
 }
 
 /* Tables become a single glass card. */
@@ -517,7 +548,7 @@ td {
 
 th {
     font-size: 0.72rem;
-    font-weight: 600;
+    font-weight: var(--weight-bold);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
@@ -571,7 +602,7 @@ tbody tr:hover td {
     padding: 0.2em 0.7em 0.2em 0.6em;
     border-radius: var(--radius-pill);
     font-size: 0.78rem;
-    font-weight: 600;
+    font-weight: var(--weight-bold);
     letter-spacing: 0.02em;
     white-space: nowrap;
     color: var(--badge-text);
@@ -624,6 +655,11 @@ tbody tr:hover td {
 /* Text helpers. */
 .text-muted {
     color: var(--text-muted);
+}
+
+/* Secondary prose (descriptions, hints, empty states) in the Light face. */
+.text-light {
+    font-weight: var(--weight-light);
 }
 
 /* For screen readers only: labels that the layout shows some other way. */
