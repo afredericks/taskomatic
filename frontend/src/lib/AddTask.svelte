@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './AddTask.css'
+
     import { onMount } from 'svelte'
 
     import { createTask, fieldErrors, getProjects } from './api'
@@ -66,7 +68,7 @@
 
 <h1>Add Task</h1>
 
-<form class="card" onsubmit={submit}>
+<form class="card add-task" onsubmit={submit}>
     <div class="field">
         <label for="task-title">Title</label>
         <input id="task-title" type="text" required bind:value={title} />
@@ -116,42 +118,3 @@
 
     <button class="btn-primary" type="submit" disabled={submitting}>Add task</button>
 </form>
-
-<style>
-    form {
-        max-width: 40rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-    }
-
-    .field {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-        width: 100%;
-    }
-
-    .field label {
-        font-size: 0.875rem;
-    }
-
-    .row {
-        display: flex;
-        gap: 1rem;
-        width: 100%;
-        flex-wrap: wrap;
-    }
-
-    .row .field {
-        flex: 1;
-        min-width: 9rem;
-        width: auto;
-    }
-
-    .error {
-        margin: 0;
-        font-size: 0.875rem;
-    }
-</style>

@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './Avatar.css'
+
     import { hueFor, initials } from './avatar'
 
     /**
@@ -11,30 +13,3 @@
 </script>
 
 <span class="avatar" style="--avatar-hue: {hueFor(seed)}" aria-hidden="true">{initials(name)}</span>
-
-<style>
-    .avatar {
-        --avatar-hue: 285;
-
-        position: relative;
-        display: inline-grid;
-        place-items: center;
-        flex-shrink: 0;
-        width: var(--avatar-size, 2.25rem);
-        height: var(--avatar-size, 2.25rem);
-        border-radius: 50%;
-        font-size: calc(var(--avatar-size, 2.25rem) * 0.36);
-        font-weight: 700;
-        line-height: 1;
-        letter-spacing: 0.02em;
-        color: var(--text-on-brand);
-        background: linear-gradient(
-            135deg,
-            oklch(66% 0.19 var(--avatar-hue)),
-            oklch(52% 0.22 calc(var(--avatar-hue) + 40))
-        );
-        box-shadow:
-            inset 0 1px 0 var(--glass-highlight),
-            0 4px 12px oklch(50% 0.2 var(--avatar-hue) / 0.35);
-    }
-</style>

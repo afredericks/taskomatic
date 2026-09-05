@@ -1,0 +1,121 @@
+.logo {
+    display: block;
+    flex: none;
+    overflow: visible;
+    filter: drop-shadow(0 2px 6px color-mix(in oklch, var(--primary) 35%, transparent));
+    transform-origin: 50% 90%;
+    transition: transform var(--ease);
+}
+
+.logo .stem {
+    stroke: var(--primary);
+    stroke-width: 4;
+    stroke-linecap: round;
+}
+
+.logo .bulb {
+    fill: var(--accent);
+    animation: done-flash 8s ease-in-out infinite;
+}
+
+.logo .antenna {
+    transition: filter var(--ease);
+}
+
+.logo .eye {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: blink 5s infinite;
+}
+
+.logo .smile-track,
+.logo .smile {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 5;
+    stroke-linecap: round;
+}
+
+.logo .smile-track {
+    opacity: 0.28;
+}
+
+.logo .smile {
+    /* One dash the length of the path, with a gap long enough that no
+       neighbouring dash shows while the offset travels off either end. */
+    stroke-dasharray: 100 200;
+    stroke-dashoffset: 0;
+    animation: fill-smile 8s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%,
+    94%,
+    100% {
+        transform: scaleY(1);
+    }
+    97% {
+        transform: scaleY(0.1);
+    }
+}
+
+/* Rest empty, draw the smile in from the left, hold it, then let it slide
+   off the right end like a finished item scrolling away, and rest again.
+   The offsets overshoot the path length by 3 so the round caps stay
+   hidden at both ends, and the loop point joins two invisible states. */
+@keyframes fill-smile {
+    0%,
+    6% {
+        stroke-dashoffset: 103;
+    }
+    40%,
+    82% {
+        stroke-dashoffset: 0;
+    }
+    94%,
+    100% {
+        stroke-dashoffset: -103;
+    }
+}
+
+/* The bulb turns "done" green as the smile completes, then settles. */
+@keyframes done-flash {
+    0%,
+    38%,
+    66%,
+    100% {
+        fill: var(--accent);
+        filter: none;
+    }
+    44%,
+    58% {
+        fill: var(--success);
+        filter: drop-shadow(0 0 3px var(--success)) drop-shadow(0 0 8px var(--success));
+    }
+}
+
+/* Hover reactions: the mark tilts its head and the antenna lights up.
+   They fire when the mark itself or the link wrapping it is hovered. */
+.logo:hover,
+a:hover > .logo,
+a:focus-visible > .logo {
+    transform: rotate(-8deg);
+}
+
+.logo:hover .antenna,
+a:hover > .logo .antenna,
+a:focus-visible > .logo .antenna {
+    filter: drop-shadow(0 0 4px var(--accent)) drop-shadow(0 0 10px var(--accent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logo .eye,
+    .logo .bulb,
+    .logo .smile {
+        animation: none;
+    }
+
+    .logo .smile-track {
+        opacity: 0;
+    }
+}

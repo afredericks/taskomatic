@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './Settings.css'
+
     import {
         THEMES,
         applyAppearance,
@@ -40,176 +42,52 @@
     }
 </script>
 
-<h1>Settings</h1>
+<div class="settings">
+    <h1>Settings</h1>
 
-<section class="card">
-    <h2>Appearance</h2>
+    <section class="card">
+        <h2>Appearance</h2>
 
-    <div class="setting">
-        <div>
-            <strong>Dark mode</strong>
-            <p class="text-muted">
-                Switch between the light and dark foundation. Until you choose, Taskomatic
-                follows your operating system.
-            </p>
+        <div class="setting">
+            <div>
+                <strong>Dark mode</strong>
+                <p class="text-muted text-light">
+                    Switch between the light and dark foundation. Until you choose, Taskomatic
+                    follows your operating system.
+                </p>
+            </div>
+            <button
+                type="button"
+                role="switch"
+                class="switch"
+                aria-checked={darkMode}
+                aria-label="Dark mode"
+                onclick={toggleMode}
+            ></button>
         </div>
-        <button
-            type="button"
-            role="switch"
-            class="switch"
-            aria-checked={darkMode}
-            aria-label="Dark mode"
-            onclick={toggleMode}
-        ></button>
-    </div>
 
-    <fieldset class="themes">
-        <legend>Theme</legend>
-        {#each THEMES as theme (theme.id)}
-            <label class="theme-card" class:selected={appearance.theme === theme.id}>
-                <input
-                    type="radio"
-                    name="theme"
-                    value={theme.id}
-                    checked={appearance.theme === theme.id}
-                    onchange={() => selectTheme(theme.id)}
-                />
-                <span class="swatches">
-                    {#each SWATCHES[theme.id] as color (color)}
-                        <span class="swatch" style="background: {color}"></span>
-                    {/each}
-                </span>
-                <span class="theme-name">{theme.label}</span>
-                <span class="foundation">{theme.foundation} foundation</span>
-            </label>
-        {/each}
-    </fieldset>
+        <fieldset class="themes">
+            <legend>Theme</legend>
+            {#each THEMES as theme (theme.id)}
+                <label class="theme-card" class:selected={appearance.theme === theme.id}>
+                    <input
+                        type="radio"
+                        name="theme"
+                        value={theme.id}
+                        checked={appearance.theme === theme.id}
+                        onchange={() => selectTheme(theme.id)}
+                    />
+                    <span class="swatches">
+                        {#each SWATCHES[theme.id] as color (color)}
+                            <span class="swatch" style="background: {color}"></span>
+                        {/each}
+                    </span>
+                    <span class="theme-name">{theme.label}</span>
+                    <span class="foundation">{theme.foundation} foundation</span>
+                </label>
+            {/each}
+        </fieldset>
 
-    <button type="button" onclick={reset}>Reset to defaults</button>
-</section>
-
-<style>
-    .card {
-        max-width: 40rem;
-    }
-
-    .card h2 {
-        margin-top: 0;
-    }
-
-    .setting {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1.5rem;
-    }
-
-    .setting p {
-        margin: 0.25rem 0 0;
-        font-size: 0.875rem;
-    }
-
-    /* Track and thumb; overrides the global glass button styling. */
-    .switch {
-        flex-shrink: 0;
-        width: 3.2rem;
-        height: 1.8rem;
-        padding: 3px;
-        border-radius: var(--radius-pill);
-        background: var(--glass-bg-strong);
-        transition: background var(--ease), border-color var(--ease);
-    }
-
-    .switch::before {
-        content: '';
-        display: block;
-        width: 1.3rem;
-        height: 1.3rem;
-        border-radius: 50%;
-        background: var(--text-muted);
-        transition: transform var(--ease), background var(--ease);
-    }
-
-    .switch[aria-checked='true'] {
-        background: var(--gradient-brand);
-        border-color: transparent;
-    }
-
-    .switch[aria-checked='true']::before {
-        background: var(--text-on-brand);
-        transform: translateX(1.4rem);
-    }
-
-    .themes {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
-        gap: 0.75rem;
-        margin: 1.5rem 0;
-        padding: 0;
-        border: 0;
-    }
-
-    legend {
-        padding: 0;
-        margin-bottom: 0.75rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-    }
-
-    .theme-card {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-        padding: 0.9rem 1rem;
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-sm);
-        background: var(--glass-bg);
-        cursor: pointer;
-        transition: border-color var(--ease), box-shadow var(--ease);
-    }
-
-    .theme-card:hover {
-        border-color: var(--border-strong);
-    }
-
-    .theme-card.selected {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px var(--ring);
-    }
-
-    .theme-card input {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .theme-card:has(input:focus-visible) {
-        outline: 2px solid var(--primary);
-        outline-offset: 2px;
-    }
-
-    .swatches {
-        display: flex;
-        gap: 0.3rem;
-    }
-
-    .swatch {
-        width: 1.1rem;
-        height: 1.1rem;
-        border-radius: 50%;
-        border: 1px solid var(--border-strong);
-    }
-
-    .theme-name {
-        font-weight: 600;
-        color: var(--text);
-    }
-
-    .foundation {
-        font-size: 0.75rem;
-        color: var(--text-faint);
-    }
-</style>
+        <button type="button" onclick={reset}>Reset to defaults</button>
+    </section>
+</div>

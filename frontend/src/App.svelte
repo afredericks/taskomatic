@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './App.css'
+
     import AddTask from './lib/AddTask.svelte'
     import AppHeader from './lib/AppHeader.svelte'
     import Home from './lib/Home.svelte'
@@ -32,13 +34,3 @@
 
     <Toasts />
 </div>
-
-<style>
-    /* Typography, tables and colours come from brand.css; this is layout only.
-       The column pins the header while PagePanel scrolls the page body. */
-    .app {
-        height: 100dvh;
-        display: flex;
-        flex-direction: column;
-    }
-</style>

@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './Modal.css'
+
     import type { Snippet } from 'svelte'
 
     /**
@@ -32,6 +34,7 @@
 <!-- Keyboard users close with Escape, which <dialog> handles natively. -->
 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
 <dialog
+    class="modal"
     bind:this={dialog}
     aria-labelledby={titleId}
     onclose={() => (open = false)}
@@ -51,70 +54,3 @@
         </div>
     </div>
 </dialog>
-
-<style>
-    dialog {
-        width: min(34rem, calc(100vw - 2rem));
-        max-height: min(72dvh, 40rem);
-        margin: auto;
-        padding: 0;
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-lg);
-        color: var(--text);
-        background: var(--glass-bg-strong);
-        box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-lg);
-        -webkit-backdrop-filter: blur(var(--glass-blur));
-        backdrop-filter: blur(var(--glass-blur));
-    }
-
-    dialog[open] {
-        animation: modal-in var(--ease);
-    }
-
-    /* ::backdrop cannot read the theme tokens everywhere, so literals. */
-    dialog::backdrop {
-        background: rgb(0 0 0 / 0.35);
-        -webkit-backdrop-filter: blur(4px);
-        backdrop-filter: blur(4px);
-    }
-
-    @keyframes modal-in {
-        from {
-            opacity: 0;
-            transform: translateY(10px) scale(0.97);
-        }
-    }
-
-    /* The frame carries the padding so a click on the backdrop is exactly a
-       click on the dialog element itself. */
-    .frame {
-        display: flex;
-        flex-direction: column;
-        max-height: inherit;
-    }
-
-    header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 1.1rem 1.5rem 0.9rem;
-        border-bottom: 1px solid var(--border);
-    }
-
-    h2 {
-        margin: 0;
-        font-size: 1.1rem;
-    }
-
-    .close {
-        padding: 0.2rem 0.6rem;
-        border-radius: var(--radius-pill);
-        line-height: 1;
-    }
-
-    .body {
-        padding: 1.1rem 1.5rem 1.4rem;
-        overflow-y: auto;
-    }
-</style>

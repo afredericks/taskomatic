@@ -1,4 +1,6 @@
 <script lang="ts">
+    import './PagePanel.css'
+
     import type { Snippet } from 'svelte'
 
     import { setPagePanel } from './pagePanel'
@@ -37,28 +39,3 @@
         {@render children()}
     </div>
 </main>
-
-<style>
-    .page-panel {
-        flex: 1;
-        min-height: 0;
-        overflow-y: auto;
-    }
-
-    .content {
-        max-width: 72rem;
-        margin: 0 auto;
-        padding: 2rem 1.5rem;
-    }
-
-    /* Fill mode: the body is exactly the panel's height, so the panel has
-       nothing to scroll. The filling child (flex: 1; min-height: 0) takes
-       the height its siblings leave and scrolls internally. The reading
-       width cap goes too, so a grid gets the whole panel to lay columns out. */
-    .fill .content {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        max-width: none;
-    }
-</style>

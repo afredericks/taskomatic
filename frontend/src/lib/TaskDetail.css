@@ -1,0 +1,30 @@
+/* The task's field grid. */
+.task-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    margin: 0 0 1.5rem;
+}
+
+.task-fields .field {
+    flex: 1 1 12rem;
+    min-width: 0;
+}
+
+.task-fields .field--wide {
+    flex-basis: 100%;
+}
+
+.task-fields .field dt {
+    font-size: 0.8rem;
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.task-fields .field dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}

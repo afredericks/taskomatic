@@ -9,6 +9,8 @@
 </script>
 
 <script lang="ts">
+    import './Capsule.css'
+
     import type { Snippet } from 'svelte'
 
     /**
@@ -69,61 +71,3 @@
 >
     {@render children()}
 </svelte:element>
-
-<style>
-    .no-dot::before {
-        display: none;
-    }
-
-    .compact {
-        padding: 0.1em 0.65em;
-        font-size: 0.75rem;
-    }
-
-    button,
-    a {
-        cursor: pointer;
-        text-decoration: none;
-        transition:
-            border-color var(--ease),
-            box-shadow var(--ease),
-            filter var(--ease);
-    }
-
-    button:hover,
-    a:hover {
-        color: var(--badge-text);
-        border-color: color-mix(in oklch, var(--badge-color) 70%, transparent);
-        box-shadow:
-            inset 0 1px 0 var(--glass-highlight),
-            0 2px 12px color-mix(in oklch, var(--badge-color) 45%, transparent);
-        filter: brightness(1.05);
-    }
-
-    /* While saving, the dot becomes a spinner (even when the dot is off). */
-    .loading::before {
-        content: '';
-        display: inline-block;
-        width: 0.6em;
-        height: 0.6em;
-        border-radius: 50%;
-        background: transparent;
-        border: 2px solid color-mix(in oklch, var(--badge-color) 30%, transparent);
-        border-top-color: var(--badge-color);
-        box-shadow: none;
-        animation: capsule-spin 700ms linear infinite;
-    }
-
-    @keyframes capsule-spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    /* Busy, not broken: keep it legible and signal progress. */
-    button:disabled {
-        opacity: 0.85;
-        cursor: progress;
-        box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-sm);
-    }
-</style>

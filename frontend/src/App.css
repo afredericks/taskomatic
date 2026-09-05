@@ -1,0 +1,7 @@
+/* Typography, tables and colours come from brand.css; this is layout only.
+   The column pins the header while PagePanel scrolls the page body. */
+.app {
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
